@@ -29,9 +29,9 @@ class LegymPost:
             }           #登录数据包
         self.run_url = ("https://cpes.legym.cn/running/app/uploadRunningDetails")
         
-        self.run_data = json.load(open('run.json',encoding='gbk',errors='ignore'))
-        self.run_data.update({"endTime": time.strftime("%F %H:%M:%S").center(60)})
-    def check_user_status(self) -> None:       #检查登录状态 
+        self.run_data = json.load(open('run2.json',encoding='gbk',errors='ignore'))
+        #self.run_data.update({"endTime": time.strftime("%F %H:%M:%S").center(60)})
+    def check_user_status(self) -> str:       #检查登录状态 
         try:    
                 response = requests.post(
                 url = self.login_url,
@@ -49,10 +49,17 @@ class LegymPost:
         if response.status_code != 200:
             print("网络连接失败")
             return 0                #状态码不为200
-        
+        data: dict = response.json()["data"]
+        token: str = data.get("accessToken", None)
+        return(token)
+
     def run_route(self) -> None:
         try:    
-                self.headers.update({"authorization": "Bearer cae0458b-93a9-4a64-b465-6b4e9b3f5820"})
+                token=LegymPost().check_user_status()
+                self.headers.update({"authorization": "Bearer "+token,
+                                     "user-agent": "okhttp/4.2.2",
+                                     "charset": "UTF-8",
+                                     "content-length": "28650"})
                 response = requests.post(
                 url = self.run_url,
                 headers = self.headers,
@@ -69,7 +76,7 @@ class LegymPost:
 if __name__ == "__main__":
     print(time.strftime("%F %H:%M:%S").center(60))
     
-    LegymPost().check_user_status()
+    # LegymPost().check_user_status()
     LegymPost().run_route()
 
     
