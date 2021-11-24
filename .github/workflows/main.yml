@@ -3,7 +3,7 @@ name: Daily run
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 17 * * *"
+    - cron: "0 0 2 * * *"
 
 env:
   TZ: 'Asia/Shanghai'
