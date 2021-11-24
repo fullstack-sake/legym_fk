@@ -6,7 +6,7 @@
 
 ## 原理
 
-该功能目前发现有6个站点；向它们`get`或`post`不同的字典字符串，就可以相当于完成手动点击的任何操作；
+该功能目前发现有2个站点；向它们`get`或`post`不同的字典字符串，就可以相当于完成手动点击的任何操作；
 
 ---
 
@@ -65,7 +65,7 @@ body = {"entrance":"1","password":"password","userName":"18888888888"}
 
 ## 站点6：uploadRunningDetails
 
-`headers`中需提供`Authorization`，采用了`Bearer<token>`，并未找到有效方法获取，只能通过抓包
+`headers`中需提供`Authorization`，采用了`Bearer<token>`，可以通过登录的`response`的`accesstoken`获取
 
 采用`post`方法，`body`结构为
 
