@@ -29,7 +29,7 @@ class LegymPost:
             }           #登录数据包
         self.run_url = ("https://cpes.legym.cn/running/app/uploadRunningDetails")
         
-        self.run_data = json.load(open('run2.json',encoding='gbk',errors='ignore'))
+        self.run_data = json.load(open('run.json',encoding='gbk',errors='ignore'))
         #self.run_data.update({"endTime": time.strftime("%F %H:%M:%S").center(60)})
     def check_user_status(self) -> str:       #检查登录状态 
         try:    
