@@ -19,12 +19,12 @@
 
 ### 站点1：Login
  **为用户提供登录服务**
-`headers`中需要提供`content-type`和`connection`。
+`headers`中需要提供`content-type`和`user-agent`。
 
 ```python
-headers = {	
+headers = {	"user-agent":"   "
     		"content-type":"application/json",
-            "connection":"Keep-Alive"}
+            }
 ```
 
 采用`post`方法，`body`如下：
