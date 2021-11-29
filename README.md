@@ -4,7 +4,7 @@
 - 本项目仅适用于**乐健体育**
 - 对代码改进有任何好的建议，欢迎提`Issues`，或者直接`PR`
 - 如果对您有帮助，请顺手点个`Star`吧
-- **Author**:smiley::  **sake**
+- **Author**:smiley::  [**sake**](https://github.com/fullstack-sake)
 
 ------
 
