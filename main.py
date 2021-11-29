@@ -23,7 +23,7 @@ class LegymPost:
 
         #登录验证
         self.headers = {
-                        "user-agent": "Mozilla/5.0 (Linux; Android 11; M2012K11AC Build/RKQ1.200826.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/95.0.4638.74 Mobile Safari/537.36 uni-app Html5Plus/1.0 (Immersed/36.07843)",
+                        "user-agent": "Mozilla/5.0 (Linux; Android 11; LE2123 Build/RQ3A.211001.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/95.0.4638.74 Mobile Safari/537.36 uni-app Html5Plus/1.0 (Immersed/36.07843)",
                         "Content-Type": "application/json"}          #请求头部
         self.login_url = ("https://cpes.legym.cn/authorization/user/manage/login")
         self.login_data = {
@@ -77,7 +77,7 @@ class LegymPost:
     def run_route(self) -> None:
         random_time= random.randint(20,30)
         self.headers.update({"user-agent": "okhttp/4.2.2"})
-        distance =int(self.distance)
+        distance =float(self.distance)
         endtime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         starttime = (datetime.datetime.now()-datetime.timedelta(minutes=random_time)).strftime("%Y-%m-%d %H:%M:%S")
         data ={
