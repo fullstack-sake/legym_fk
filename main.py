@@ -178,7 +178,7 @@ class LegymPost:
                 "totalPart": 0.0,
                 "type": "自由跑",
                 "uneffectiveReason": "",
-                "avePace": random_time / distance * 1000 + random.randint(0,1) / 10,
+                "avePace": random_time * 60/ distance * 1000 + random.randint(0,1) / 10,
                 "calorie": int(distance * random.uniform(70.0,75.0)),
                 "effectiveMileage": distance,
                 "effectivePart": 1,
@@ -205,3 +205,4 @@ if __name__ == "__main__":
     LegymPost().__init__()
     LegymPost().check_login_status()
     LegymPost().run_route()
+    
