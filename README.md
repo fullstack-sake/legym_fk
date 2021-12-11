@@ -1,16 +1,16 @@
-# 乐健体育模拟跑步
+# 乐健体育模拟跑步与活动签到
 ## 项目介绍
 
 - 本项目仅适用于**乐健体育**
-- 对代码改进有任何好的建议，欢迎提`Issues`，或者直接`PR`
+- 对代码改进有任何好的建议，欢迎提`Issues`，或者直接`PR`，感谢:handshake::heart:!!
 - 如果对您有帮助，请顺手点个`Star`吧
 - **Author**:smiley::  [**sake**](https://github.com/fullstack-sake)
 
 ------
 
-## 模拟跑步原理
+## 模拟跑步与活动签到原理
 
-先用`frida`配合此项目仓库的`sake.js`来**hook**证书验证，干掉**乐健体育**的`ssl pinning`，然后进行`packetcapture`。通过分析`packet`，发现有6个站点，向它们`get`或`post`不同的`json`进行`forward packet`，就可以实现**无乐健体育式模拟跑步**。
+先用`frida`配合此项目仓库的`sake.js`来**hook**证书验证，干掉**乐健体育**的`ssl pinning`，然后进行`packetcapture`。通过分析`packet`，向相应站点`get`或`post`不同的`json`进行`forward packet`，就可以实现**无乐健体育式模拟跑步与活动签到**。
 
 
 ### 站点1：Login
@@ -34,6 +34,8 @@ body = {"entrance":"1","password":"password","userName":"18888888888"}
 `body`要提供`getCurrent`获取的`semesterId`，这里返还的`response`我们只需要`limitationsGoalsSexInfoId`
 
 ### 站点4：uploadRunningDetails
+
+**上传跑步数据**
 
 `headers`中需提供`Authorization`，采用了`Bearer<token>`，可以通过获取登录的`response`的`accesstoken`拼接为`Bearer accesstoken`
 
@@ -62,8 +64,27 @@ data ={
         }
 ```
 
-### 站点5：getTotalRunning
-### 站点6：getRunningRange
+### 站点5：getActivityList
+
+**获取课外活动列表**
+
+采用`post`方法，这里返还的`response`我们只需要`ActivityId`
+
+### 站点6：signUpActivity
+
+**活动报名**
+
+可以报名未开始的活动，服务端不验证报名是否开始。
+
+采用`post`方法，要提供``getActivityList`获取的`ActivityId`
+
+### 站点7：signInActivity
+
+**活动签到**
+
+进行活动的签到，活动签到不需要位置信息，位置信息仅在客户端验证
+
+采用`post`方法，要提供``getActivityList`获取的`ActivityId`
 
 
 ------
