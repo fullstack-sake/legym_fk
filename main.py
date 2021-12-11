@@ -17,7 +17,7 @@ class LegymPost:
             exit(-1)
         self.userName = sys.argv[1] 
         self.password = sys.argv[2]
-        # self.distance = sys.argv[3]
+        self.distance = sys.argv[3]
         
         self.headers = {
                         "user-agent": "Mozilla/5.0 (Linux; Android 11; LE2123 Build/RQ3A.211001.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/95.0.4638.74 Mobile Safari/537.36 uni-app Html5Plus/1.0 (Immersed/36.07843)",
