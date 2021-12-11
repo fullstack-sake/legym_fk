@@ -2,6 +2,8 @@ name:  Legym_run
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 13 * * *'
 
 env:
   TZ: 'Asia/Shanghai'
