@@ -76,7 +76,7 @@ data ={
 
 可以报名未开始的活动，服务端不验证报名是否开始。
 
-采用`post`方法，要提供``getActivityList`获取的`ActivityId`
+采用`post`方法，要提供`getActivityList`获取的`ActivityId`
 
 ### 站点7：signInActivity
 
@@ -84,7 +84,7 @@ data ={
 
 进行活动的签到，活动签到不需要位置信息，位置信息仅在客户端验证
 
-采用`post`方法，要提供``getActivityList`获取的`ActivityId`
+采用`post`方法，要提供`getActivityList`获取的`ActivityId`
 
 
 ------
