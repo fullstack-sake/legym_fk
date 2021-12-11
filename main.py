@@ -34,13 +34,19 @@ class LegymPost:
             self.login_response = requests.post(self.login_url, headers = self.headers, data = json.dumps(self.login_data), verify = False)   #开始登录验证
         except Exception as e:
             print(e)
-            
+
         #获取response里的关键数据
         self.message: dict = self.login_response.json()["message"]
         self.data: dict = self.login_response.json()["data"]
         self.token: str = self.data.get("accessToken", None)
         self.schoolId: str = self.data.get("schoolId", None)
         self.headers.update({"authorization": "Bearer "+self.token,"Organization": self.schoolId})
+
+        # 获取userid，活动签到用
+        fitness_url = 'https://cpes.legym.cn/fitness/fitness/app/info'
+        data = {"year":0}
+        r = requests.post(fitness_url,headers=self.headers,data=json.dumps(data))
+        self.userId:str = r.json()['data']['userId']
         
 
     #检查登录状态
@@ -72,6 +78,89 @@ class LegymPost:
         data: dict = limit_response.json()["data"]
         self.limitation: str = data.get("limitationsGoalsSexInfoId", None)
         return self.limitation
+
+    def getActivityList(self) -> list:
+        """获取课外活动列表
+        ---
+        每周三次打卡的锻炼活动
+
+        :return `list`: 课外活动列表
+        """
+        url = 'https://cpes.legym.cn/education/app/activity/getActivityList'
+        data = {"name":"","campus":"","page":1,"size":10,"state":"","topicId":"","week":""}
+        r = requests.post(url=url, headers=self.headers, data=json.dumps(data),verify=False)
+        # print(r.json())
+        activityList:list = r.json()['data']['items']
+        return activityList
+
+
+    def activityDetail(self, activityId:str) -> dict:
+        """活动详情
+        ---
+        获取课外活动的详情，暂时可能没用
+        
+        :param `activityId` : 活动id
+        
+        :return `dict` : 活动详情信息
+        """
+        url = f'https://cpes.legym.cn//education/app/activity/getStudentActivityDetail?activityId={activityId}'
+        r = requests.get(url, headers=self.headers,verify=False)
+        detail = r.json()['data']
+
+    
+    def signUpActivity(self, activityId:str) -> str:
+        """活动报名
+        ---
+        活动报名，可以报名未开始的活动，服务端不验证报名是否开始
+        
+        :param `activityId` : 活动id
+        
+        :return `str` : 响应数据
+        """
+        url = 'https://cpes.legym.cn/education/app/activity/signUp'
+        data = {"activityId":activityId}
+        r = requests.post(url, headers=self.headers, data=json.dumps(data))
+        response = r.text
+
+        return response
+    
+    def signInActivity(self, activityId:str) -> str:
+        """活动签到
+        ---
+        进行活动的签到，活动签到不需要位置信息，位置信息仅在客户端验证
+        
+        :param `activityId` : 活动id
+        
+        :return `str` : response body
+        """
+        url = 'https://cpes.legym.cn/education/activity/app/attainability/sign'
+        data = {
+            "activityId": activityId,
+            "times": "1",
+            "pageType": "activity",
+            "userId": self.userId,
+            "activityType": 0,
+            "attainabilityType": 2
+        }
+        r = requests.put(url=url, headers=self.headers, data=json.dumps(data))
+
+        return r.text
+
+    def signInSimple(self, activityId:str) -> None:
+        """签到详情界面
+        ---
+        只是用来更逼真地模拟签到流程
+        
+        :param `activityId` : 活动id
+        
+        :return `None` : 无返回值
+        """
+        url = 'https://cpes.legym.cn/education/activity/simple/attainability/get'
+        data = {"simpleActivityId":activityId,"times":"1"}
+        r = requests.post(url, headers=self.headers, data=json.dumps(data))
+
+        return 0
+        
 
     #发送跑步数据
     def run_route(self) -> None:
@@ -110,6 +199,7 @@ class LegymPost:
         response = requests.post(url, headers = self.headers, data = json.dumps(self.run_data), verify = False)       #开始跑步发包
         print(response.text)
         return 0  
+
 if __name__ == "__main__":
     print(time.strftime("%F %H:%M:%S").center(60))
     LegymPost().__init__()
