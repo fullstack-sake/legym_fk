@@ -119,6 +119,7 @@ data ={
   ![4](https://raw.githubusercontent.com/fullstack-sake/legym_fk/main/images/4.png)
   ![5](https://raw.githubusercontent.com/fullstack-sake/legym_fk/main/images/5.png)
   ![6](https://raw.githubusercontent.com/fullstack-sake/legym_fk/main/images/6.png)
+  ![10](https://raw.githubusercontent.com/fullstack-sake/legym_fk/main/images/10.png)
 
 
 4. 完成后，进入`Actions`界面。工作流默认会自动开启。你也可以手动执行工作流，以防止自动数据上传失效。
