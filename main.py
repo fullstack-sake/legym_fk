@@ -119,8 +119,8 @@ class LegymPost:
     def Activity(self):
         lst1 = app.getActivityList()
         for i in range(0,len(lst1)):
-            print(app.signUpActivity(lst1[i]))
-            print(app.signInActivity(lst1[i]))
+            print(app.signUpActivity(lst1[i]).encode())
+            print(app.signInActivity(lst1[i]).encode())
 
     #发送跑步数据
     def run_route(self) -> None:
