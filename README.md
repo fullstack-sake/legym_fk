@@ -93,7 +93,7 @@ data ={
 
 ### 如果部署了python环境：
 
-直接将**main.py**文件 **raw** 到本地，然后在终端/命令提示符下输入`python main.py 账号 密码 里程`
+直接将**main.py**文件 **raw** 到本地，然后在终端/命令提示符下输入`python main.py 账号 密码 里程 参加活动的关键词`
 
  ![a1](https://raw.githubusercontent.com/fullstack-sake/legym_fk/main/images/a1.png)
 
@@ -114,6 +114,7 @@ data ={
 - 在`Name`中填入`username`，在`Value`中填入你的账号，点击`Add secret`；
 - 回到刚刚的界面，点击`New repository secret`，在`Name`中填入`password`，在`Value`中填入你的密码，再点击`Add secret`；
 - 再回到刚刚的界面，点击`New repository secret`，在`Name`中填入`distance`，在`Value`中填入你想要跑的里程，再点击`Add secret`。
+- 继续回到刚刚的页面，点击`New repository secret`，在`Name`中填入`TargetActivities`， 在`Value`中填入你需要参加活动的关键字（可以汉字）, 再点击`Add secret`。
  ![3](https://raw.githubusercontent.com/fullstack-sake/legym_fk/main/images/3.png)
   ![4](https://raw.githubusercontent.com/fullstack-sake/legym_fk/main/images/4.png)
   ![5](https://raw.githubusercontent.com/fullstack-sake/legym_fk/main/images/5.png)

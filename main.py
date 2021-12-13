@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import random           
 import sys
 import time
@@ -5,6 +7,7 @@ import requests
 import urllib3
 import json
 import datetime
+import base64
 
 """乐健体育模拟跑步分析"""
 """author:sake"""
@@ -18,6 +21,7 @@ class LegymPost:
         self.userName = sys.argv[1] 
         self.password = sys.argv[2]
         self.distance = sys.argv[3]
+        self.TargetActivities = sys.argv[4]
         
         self.headers = {
                         "user-agent": "Mozilla/5.0 (Linux; Android 11; LE2123 Build/RQ3A.211001.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/95.0.4638.74 Mobile Safari/537.36 uni-app Html5Plus/1.0 (Immersed/36.07843)",
@@ -75,9 +79,20 @@ class LegymPost:
         url = 'https://cpes.legym.cn/education/app/activity/getActivityList'
         data = {"name":"","campus":"","page":1,"size":10,"state":"","topicId":"","week":""}
         r = requests.post(url=url, headers=self.headers, data=json.dumps(data),verify=False)
+        #print(json.dumps(r.json()).encode())
         activityList:list = r.json()['data']['items']
-        lst = [item[key] for item in activityList for key in item]
-        return lst
+        lst1 = app.filtrateTargetActivity(activityList)
+        return lst1
+
+
+    #筛选目标活动
+    def filtrateTargetActivity(self,activityList:list) -> list:
+        TargetActivities = self.TargetActivities
+        lst1 = []
+        for item in activityList:
+            if(item['stateName'] == "活动进行中" and item['name'].find(TargetActivities) != -1):
+                lst1.append(item['id'])
+        return lst1
 
     #活动报名
     def signUpActivity(self, activityId:str) -> str:
@@ -102,10 +117,10 @@ class LegymPost:
     
     #活动批量报名签到
     def Activity(self):
-        lst = app.getActivityList()
-        for i in range(0,int(len(lst)/20)):
-            app.signUpActivity(lst[20*i])
-            app.signInActivity(lst[20*i])   
+        lst1 = app.getActivityList()
+        for i in range(0,len(lst1)):
+            print(app.signUpActivity(lst1[i]))
+            print(app.signInActivity(lst1[i]))
 
     #发送跑步数据
     def run_route(self) -> None:
@@ -150,5 +165,5 @@ if __name__ == "__main__":
     app=LegymPost()
     app.__init__()          #登录
     app.Activity()          #签到
-    app.run_route()         #跑步
+    #app.run_route()         #跑步
     
