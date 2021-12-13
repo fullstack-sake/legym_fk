@@ -95,7 +95,7 @@ data ={
 
 直接将**main.py**文件 **raw** 到本地，然后在终端/命令提示符下输入`python main.py 账号 密码 里程 参加活动的关键词`
 
- ![a1](https://raw.githubusercontent.com/fullstack-sake/legym_fk/main/images/a1.png)
+ ![a1](https://raw.githubusercontent.com/NightFrost42/legym_fk/main/images/a1.png)
 
 
 
