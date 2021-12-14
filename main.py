@@ -165,5 +165,5 @@ if __name__ == "__main__":
     app=LegymPost()
     app.__init__()          #登录
     app.Activity()          #签到
-    #app.run_route()         #跑步
+    app.run_route()         #跑步
     
