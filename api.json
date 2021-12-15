@@ -1,0 +1,102 @@
+{
+    "login": {
+        "url": "https://cpes.legym.cn/authorization/user/manage/login",
+        "data": {
+            "entrance": "1",
+            "password": "NotComplemented",
+            "userName": "NotComplemented"
+        },
+        "description": "Log in Legym account"
+    },
+    "fitness": {
+        "url": "https://cpes.legym.cn/fitness/fitness/app/info",
+        "data": {
+            "year": 0
+        },
+        "description": "Get user ID"
+    },
+    "semester": {
+        "url": "https://cpes.legym.cn/education/semester/getCurrent",
+        "description": "Get current semester"
+    },
+    "limit": {
+        "url": "https://cpes.legym.cn/running/app/getRunningLimit",
+        "data": {
+            "semesterId": "toBeComplemented"
+        },
+        "description": "Get running distance limit"
+    },
+    "activities": {
+        "url": "https://cpes.legym.cn/education/app/activity/getActivityList",
+        "data": {
+            "name": "",
+            "campus": "",
+            "page": 1,
+            "size": 10,
+            "state": "",
+            "topicId": "",
+            "week": ""
+        },
+        "description": "Get outdoor activity list"
+    },
+    "signUp": {
+        "url": "https://cpes.legym.cn/education/app/activity/signUp",
+        "data": {
+            "activityId": "toBeComplemented"
+        },
+        "description": "Sign up for a certain activity"
+    },
+    "sign": {
+        "url": "https://cpes.legym.cn/education/activity/app/attainability/sign",
+        "data": {
+            "activityId": "toBeComplemented",
+            "times": "1",
+            "pageType": "activity",
+            "userId": "toBeComplemented",
+            "activityType": 0,
+            "attainabilityType": 1
+        },
+        "description": "Sign in for a certain activity"
+    },
+    "upload": {
+        "url": "https://cpes.legym.cn/running/app/uploadRunningDetails",
+        "data": {
+            "scoringType": 1,
+            "semesterId": "toBeComplemented",
+            "signPoint": [],
+            "startTime": "toBeComplemented",
+            "totalMileage": "toBeComplemented",
+            "totalPart": 0.0,
+            "type": "自由跑",
+            "uneffectiveReason": "",
+            "avePace": "toBeComplemented",
+            "calorie": "toBeComplemented",
+            "effectiveMileage": "toBeComplemented",
+            "effectivePart": 1,
+            "endTime": "toBeComplemented",
+            "gpsMileage": "toBeComplemented",
+            "limitationsGoalsSexInfoId": "toBeComplemented",
+            "paceNumber": "toBeComplemented",
+            "paceRange": "toBeComplemented",
+            "routineLine": [
+                {
+                    "latitude": 30.756303201239845,
+                    "longitude": 103.93206457325871
+                },
+                {
+                    "latitude": 30.756346614671184,
+                    "longitude": 103.93206545656531
+                },
+                {
+                    "latitude": 30.756359404607583,
+                    "longitude": 103.93407893568614
+                },
+                {
+                    "latitude": 30.753229499261558,
+                    "longitude": 103.93407611144278
+                }
+            ]
+        },
+        "description": "Upload running data"
+    }
+}
