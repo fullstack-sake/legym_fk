@@ -192,6 +192,5 @@ class LegymPost:
 if __name__ == "__main__":
     print(time.strftime("%F %H:%M:%S").center(60))
     app = LegymPost()
-    app.__init__()  # 登录
     app.Activity()  # 签到
     # app.run_route()         #跑步
