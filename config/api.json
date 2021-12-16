@@ -9,14 +9,6 @@
         },
         "description": "Log in Legym account"
     },
-    "fitness": {
-        "url": "https://cpes.legym.cn/fitness/fitness/app/info",
-        "method": "post",
-        "data": {
-            "year": 0
-        },
-        "description": "Get user ID"
-    },
     "semester": {
         "url": "https://cpes.legym.cn/education/semester/getCurrent",
         "method": "get",
