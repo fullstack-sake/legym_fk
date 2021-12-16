@@ -1,6 +1,7 @@
 {
     "login": {
         "url": "https://cpes.legym.cn/authorization/user/manage/login",
+        "method": "post",
         "data": {
             "entrance": "1",
             "password": "NotComplemented",
@@ -10,6 +11,7 @@
     },
     "fitness": {
         "url": "https://cpes.legym.cn/fitness/fitness/app/info",
+        "method": "post",
         "data": {
             "year": 0
         },
@@ -17,10 +19,12 @@
     },
     "semester": {
         "url": "https://cpes.legym.cn/education/semester/getCurrent",
+        "method": "get",
         "description": "Get current semester"
     },
     "limit": {
         "url": "https://cpes.legym.cn/running/app/getRunningLimit",
+        "method": "post",
         "data": {
             "semesterId": "toBeComplemented"
         },
@@ -28,6 +32,7 @@
     },
     "activities": {
         "url": "https://cpes.legym.cn/education/app/activity/getActivityList",
+        "method": "post",
         "data": {
             "name": "",
             "campus": "",
@@ -41,13 +46,15 @@
     },
     "signUp": {
         "url": "https://cpes.legym.cn/education/app/activity/signUp",
+        "method": "post",
         "data": {
             "activityId": "toBeComplemented"
         },
         "description": "Sign up for a certain activity"
     },
-    "sign": {
+    "signIn": {
         "url": "https://cpes.legym.cn/education/activity/app/attainability/sign",
+        "method": "put",
         "data": {
             "activityId": "toBeComplemented",
             "times": "1",
@@ -60,6 +67,7 @@
     },
     "upload": {
         "url": "https://cpes.legym.cn/running/app/uploadRunningDetails",
+        "method": "post",
         "data": {
             "scoringType": 1,
             "semesterId": "toBeComplemented",
