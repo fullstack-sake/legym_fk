@@ -128,7 +128,7 @@ class LegymHacker(LegymRequester):
         """
         self._update_api("signUp", {"activityId": activity_id})
         response = self._request("signUp")
-        return response.data
+        return response.get("success"), response.get("reason")
 
     def __sign_in_with_id(self, activity_id: str) -> str:
         """Sign in activity with ID.
@@ -151,7 +151,7 @@ class LegymHacker(LegymRequester):
             password: Legym password.
 
         Returns:
-            User's personal info.
+            User name and school name.
         """
         self._update_api("login", {"userName": username, "password": password})
         response = self._request("login")
@@ -167,10 +167,7 @@ class LegymHacker(LegymRequester):
         self.__get_activities()
         self.__limit = self.__get_limit()
 
-        return {
-            "name": response.get("realName"),
-            "school": response.get("schoolName"),
-        }
+        return response.get("realName"), response.get("schoolName")
 
     def sign_up(self, activity_name: str = "") -> dict:
         """Sign up for activity.
@@ -181,7 +178,8 @@ class LegymHacker(LegymRequester):
             activity will be selected.
 
         Returns:
-            Response data, containing key `success` and `reason`.
+            - [0] `True` on success, or `False` on failure.
+            - [1] Reason of success or failure.
         """
         activity = (
             self.__get_first_available_activity()
@@ -190,11 +188,11 @@ class LegymHacker(LegymRequester):
         )
 
         if activity["state"] == ActivityState.signed:
-            return {"success": False, "reason": "signed in already"}
+            return False, "signed in already"
         elif activity["state"] == ActivityState.registered:
-            return {"success": True, "reason": "signed up already"}
+            return True, "signed up already"
         elif activity["state"] == ActivityState.blocked:
-            return {"success": False, "reason": "not available yet"}
+            return False, "not available yet"
 
         return self.__sign_up_with_id(activity["id"])
 
