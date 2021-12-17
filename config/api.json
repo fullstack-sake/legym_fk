@@ -1,27 +1,4 @@
 {
-    "login": {
-        "url": "https://cpes.legym.cn/authorization/user/manage/login",
-        "method": "post",
-        "data": {
-            "entrance": "1",
-            "password": "NotComplemented",
-            "userName": "NotComplemented"
-        },
-        "description": "Log in Legym account"
-    },
-    "semester": {
-        "url": "https://cpes.legym.cn/education/semester/getCurrent",
-        "method": "get",
-        "description": "Get current semester"
-    },
-    "limit": {
-        "url": "https://cpes.legym.cn/running/app/getRunningLimit",
-        "method": "post",
-        "data": {
-            "semesterId": "toBeComplemented"
-        },
-        "description": "Get running distance limit"
-    },
     "activities": {
         "url": "https://cpes.legym.cn/education/app/activity/getActivityList",
         "method": "post",
@@ -34,50 +11,68 @@
             "topicId": "",
             "week": ""
         },
-        "description": "Get outdoor activity list"
+        "demands": [
+            "items"
+        ],
+        "description": "Get outdoor activities"
     },
-    "signUp": {
-        "url": "https://cpes.legym.cn/education/app/activity/signUp",
+    "limit": {
+        "url": "https://cpes.legym.cn/running/app/getRunningLimit",
         "method": "post",
         "data": {
-            "activityId": "toBeComplemented"
+            "semesterId": null
         },
-        "description": "Sign up for a certain activity"
+        "demands": [
+            "effectiveMileageEnd",
+            "limitationsGoalsSexInfoId"
+        ],
+        "description": "Get running distance limit"
     },
-    "signIn": {
-        "url": "https://cpes.legym.cn/education/activity/app/attainability/sign",
-        "method": "put",
+    "login": {
+        "url": "https://cpes.legym.cn/authorization/user/manage/login",
+        "method": "post",
         "data": {
-            "activityId": "toBeComplemented",
-            "times": "1",
-            "pageType": "activity",
-            "userId": "toBeComplemented",
-            "activityType": 0,
-            "attainabilityType": 1
+            "entrance": "1",
+            "password": "NotComplemented",
+            "userName": "NotComplemented"
         },
-        "description": "Sign in for a certain activity"
+        "demands": [
+            "id",
+            "accessToken",
+            "schoolId"
+        ],
+        "description": "Log in Legym account"
     },
-    "upload": {
+    "semester": {
+        "url": "https://cpes.legym.cn/education/semester/getCurrent",
+        "method": "get",
+        "data": {},
+        "demands": [
+            "id"
+        ],
+        "description": "Get current semester"
+    },
+    "running": {
         "url": "https://cpes.legym.cn/running/app/uploadRunningDetails",
         "method": "post",
         "data": {
             "scoringType": 1,
-            "semesterId": "toBeComplemented",
+            "semesterId": null,
             "signPoint": [],
-            "startTime": "toBeComplemented",
-            "totalMileage": "toBeComplemented",
+            "startTime": null,
+            "totalMileage": null,
             "totalPart": 0.0,
             "type": "自由跑",
             "uneffectiveReason": "",
-            "avePace": "toBeComplemented",
-            "calorie": "toBeComplemented",
-            "effectiveMileage": "toBeComplemented",
+            "avePace": null,
+            "calorie": null,
+            "effectiveMileage": null,
             "effectivePart": 1,
-            "endTime": "toBeComplemented",
-            "gpsMileage": "toBeComplemented",
-            "limitationsGoalsSexInfoId": "toBeComplemented",
-            "paceNumber": "toBeComplemented",
-            "paceRange": "toBeComplemented",
+            "endTime": null,
+            "gpsMileage": null,
+            "limitationsGoalsSexInfoId": null,
+            "paceNumber": null,
+            "paceRange": null,
             "routineLine": [
                 {
                     "latitude": 30.756303201239845,
@@ -97,6 +92,32 @@
                 }
             ]
         },
+        "demands": [],
         "description": "Upload running data"
+    },
+    "signIn": {
+        "url": "https://cpes.legym.cn/education/activity/app/attainability/sign",
+        "method": "put",
+        "data": {
+            "activityId": null,
+            "times": "1",
+            "pageType": "activity",
+            "userId": null,
+            "activityType": 0,
+            "attainabilityType": 1
+        },
+        "demands": [],
+        "description": "Sign in for a certain activity"
+    },
+    "signUp": {
+        "url": "https://cpes.legym.cn/education/app/activity/signUp",
+        "method": "post",
+        "data": {
+            "activityId": null
+        },
+        "demands": [
+            "success"
+        ],
+        "description": "Sign up for a certain activity"
     }
 }
