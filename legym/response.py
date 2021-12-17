@@ -23,7 +23,7 @@ class LegymResponse:
             return
 
         try:
-            response_json: dict = response.json()
+            response_json: dict = json.loads(response.text.encode("utf-8"))
         except json.JSONDecodeError:
             raise Exception(response.text)
         else:
