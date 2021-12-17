@@ -33,6 +33,6 @@ if __name__ == "__main__":
     username, password, distance, activity = parse_args()
     hacker = LegymHacker()
     hacker.login(username, password)
-    hacker.running(distance)
-    hacker.sign_up(activity)
+    print(hacker.running(distance))
+    print(hacker.sign_up(activity)["success"])
     hacker.sign_in()
