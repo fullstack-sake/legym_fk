@@ -10,53 +10,55 @@ class LegymResponse:
     """Response returned by Legym API."""
 
     def __init__(self, response: requests.Response, name: str) -> None:
+        """Validate and parse raw response.
+
+        Args:
+            response: Raw response returned by Legym API.
+            name: Name to mark this piece of response.
+        """
         self.__response = response
         self.__name = name
         self.__parse_to_json()
-        self.__validate_status()
+        self.__ensure_status()
+        self.__ensure_data()
 
     def __parse_to_json(self) -> None:
         """Parse response to JSON form."""
         try:
             self.__body: dict = self.__response.json()
         except json.JSONDecodeError:
-            raise LegymException(f"{self.__name} API 的响应无法序列化：{self.__response.text}")
+            raise LegymException(f"响应 {self.__name} 无法序列化：{self.__response.text}")
 
-        try:
-            assert "data" in self.__body.keys()
-        except AssertionError:
-            raise LegymException(f"{self.__name} API 的响应没有 `data` 字段")
-
-    def __validate_status(self) -> None:
-        """Validate status code of response."""
+    def __ensure_status(self) -> None:
+        """Ensure response status code equals 200."""
         status = self.__response.status_code
         if status == 200:
             return
 
-        self.persistence()
+        self.persist()
         raise LegymException(self.__body.get("message", f"网络异常，状态码：{status}"))
 
+    def __ensure_data(self) -> None:
+        """Ensure response JSON has key `data`."""
+        if "data" in self.__body.keys():
+            return
+
+        self.persist()
+        raise LegymException(f"响应 {self.__name} 没有 `data` 字段")
+
     def __getitem__(self, key: str):
-        """Get item in response.
-
-        Args:
-            key: Key of demanded value.
-
-        Returns:
-            Value of the item.
-        """
-        # Search key in response.
+        # Search in outer response.
         if key in self.__body.keys():
             return self.__body[key]
 
-        # Search key in `data`.
+        # Search key inside `data`.
         if key in self.__body["data"].keys():
             return self.__body["data"][key]
 
         raise LegymException(f"{self.__name} API 的响应没有 `{key}` 字段")
 
-    def persistence(self) -> None:
-        """Response persistence.
+    def persist(self) -> None:
+        """Persist response JSON under directory /responses.
 
         Note:
             Mostly for debug purpose.
