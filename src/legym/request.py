@@ -29,20 +29,28 @@ class LegymRequester:
         ```
         """
         api_path = os.path.join("config", "api.json")
+
         try:
             with open(api_path, "r", encoding="utf-8") as fr:
                 self._api_dict: dict[str, dict] = json.load(fr)
+
         except FileNotFoundError:
-            raise FileNotFoundError("API config not found")
+            raise FileNotFoundError(
+                f"API config not found under path '{api_path}'"
+            ) from None
 
     def __read_headers(self) -> None:
         """Read headers configuration."""
         headers_path = os.path.join("config", "headers.json")
+
         try:
             with open(headers_path, "r", encoding="utf-8") as fr:
                 self._headers: dict = json.load(fr)
+
         except FileNotFoundError:
-            raise FileNotFoundError("headers config not found")
+            raise FileNotFoundError(
+                f"Headers config not found under path '{headers_path}'"
+            ) from None
 
     def _request(self, api_name: str) -> LegymResponse:
         """Issue a request.
@@ -51,7 +59,7 @@ class LegymRequester:
             api_name: Name of API, to which the request is issued.
 
         Returns:
-            Legym response.
+            Processed response.
         """
         api = self._api_dict[api_name]
         url = api["url"]
@@ -61,9 +69,9 @@ class LegymRequester:
         if method == "get":
             response = requests.get(url, headers=self._headers)
         elif method == "post":
-            response = requests.post(url, headers=self._headers, data=data)
+            response = requests.post(url, data, headers=self._headers)
         elif method == "put":
-            response = requests.put(url, headers=self._headers, data=data)
+            response = requests.put(url, data, headers=self._headers)
         else:
             raise Exception("invalid request type")
 
@@ -76,4 +84,5 @@ class LegymRequester:
             api_name: Name of API, of which the data will be updated.
             new_data: New data to add.
         """
-        self._api_dict[api_name]["data"].update(new_data)
+        cur_data: dict = self._api_dict[api_name]["data"]
+        cur_data.update(new_data)
