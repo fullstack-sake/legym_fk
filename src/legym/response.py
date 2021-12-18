@@ -14,14 +14,18 @@ class LegymResponse:
         self.__name = name
         self.__parse_to_json()
         self.__validate_status()
-        self.__parse_content()
 
     def __parse_to_json(self) -> None:
         """Parse response to JSON form."""
         try:
             self.__body: dict = self.__response.json()
         except json.JSONDecodeError:
-            raise LegymException(f"无法序列化的响应：{self.__response.text}")
+            raise LegymException(f"{self.__name} API 的响应无法序列化：{self.__response.text}")
+
+        try:
+            assert "data" in self.__body.keys()
+        except AssertionError:
+            raise LegymException(f"{self.__name} API 的响应没有 `data` 字段")
 
     def __validate_status(self) -> None:
         """Validate status code of response."""
@@ -32,33 +36,24 @@ class LegymResponse:
         self.persistence()
         raise LegymException(self.__body.get("message", f"网络异常，状态码：{status}"))
 
-    def __parse_content(self) -> None:
-        """Parse code, message, data of response."""
-        del self.__response
+    def __getitem__(self, key: str):
+        """Get item in response.
 
-        try:
-            self.__code: str = self.__body["code"]
-            self.__message: str = self.__body["message"]
-            self.__data: dict = self.__body["data"]
+        Args:
+            key: Key of demanded value.
 
-        except KeyError:
-            self.persistence()
-            raise LegymException("网站响应格式超出预期")
+        Returns:
+            Value of the item.
+        """
+        # Search key in response.
+        if key in self.__body.keys():
+            return self.__body[key]
 
-    @property
-    def code(self):
-        """Set code as read-only."""
-        return self.__code
+        # Search key in `data`.
+        if key in self.__body["data"].keys():
+            return self.__body["data"][key]
 
-    @property
-    def message(self):
-        """Set message as read-only."""
-        return self.__message
-
-    @property
-    def data(self):
-        """Set data as read-only."""
-        return self.__data
+        raise LegymException(f"{self.__name} API 的响应没有 `{key}` 字段")
 
     def persistence(self) -> None:
         """Response persistence.
@@ -74,17 +69,3 @@ class LegymResponse:
 
         with open(filepath, "w", encoding="utf-8") as fw:
             json.dump(self.__body, fw, ensure_ascii=False)
-
-    def get(self, key: str):
-        """Get item in response data.
-
-        Args:
-            key: Key of demanded value.
-
-        Returns:
-            Value of the item.
-        """
-        try:
-            return self.__data[key]
-        except KeyError:
-            raise LegymException(f"{self.__name} API 响应中的 `data` 没有 `{key}` 字段")
