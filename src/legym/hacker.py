@@ -1,6 +1,7 @@
 import random
 from datetime import datetime, timedelta
 
+from legym.exception import LegymException
 from legym.request import LegymRequester
 
 
@@ -24,27 +25,27 @@ class LegymHacker(LegymRequester):
         super().__init__()
 
     def __get_semester(self) -> None:
-        """Get semester ID and update concerning API."""
+        """Get semester ID and update relevant API."""
         response = self._request("semester")
-        semester_id = response.get("id")
+        semester_id = response["id"]
         self._update_api("limit", {"semesterId": semester_id})
         self._update_api("running", {"semesterId": semester_id})
 
     def __get_limit(self) -> float:
-        """Get mileage limit and update concerning API.
+        """Get mileage limit and update relevant API.
 
         Returns:
             Upper limit of mileage.
         """
         response = self._request("limit")
-        limit_id = response.get("limitationsGoalsSexInfoId")
+        limit_id = response["limitationsGoalsSexInfoId"]
         self._update_api("running", {"limitationsGoalsSexInfoId": limit_id})
-        return response.get("effectiveMileageEnd")
+        return response["effectiveMileageEnd"]
 
     def __get_activities(self) -> None:
         """Get activities open for signing up."""
         response = self._request("activities")
-        activities_list = response.get("items")
+        activities_list = response["items"]
 
         self.__activities = []
         for activity in activities_list:
@@ -97,7 +98,7 @@ class LegymHacker(LegymRequester):
                 )
             )[0]
         except IndexError:
-            raise IndexError("available activity not found")
+            raise LegymException("当前没有可报名的活动")
 
     def __get_specified_activity(self, activity_name: str) -> dict:
         """Get specified activity.
@@ -115,20 +116,21 @@ class LegymHacker(LegymRequester):
                 )
             )[0]
         except IndexError:
-            raise IndexError(f"activity '{activity_name}' not found")
+            raise LegymException(f"找不到活动：{activity_name}")
 
-    def __sign_up_with_id(self, activity_id: str) -> dict:
+    def __sign_up_with_id(self, activity_id: str) -> tuple[bool, str]:
         """Sign up activity with ID.
 
         Args:
             activity_id: ID of activity.
 
         Returns:
-            Response data.
+            - [0] `True` on success, or `False` on failure.
+            - [1] Reason of success or failure.
         """
         self._update_api("signUp", {"activityId": activity_id})
         response = self._request("signUp")
-        return response.get("success"), response.get("reason")
+        return response["success"], response["reason"]
 
     def __sign_in_with_id(self, activity_id: str) -> str:
         """Sign in activity with ID.
@@ -141,9 +143,9 @@ class LegymHacker(LegymRequester):
         """
         self._update_api("signIn", {"activityId": activity_id})
         response = self._request("signIn")
-        return response.message
+        return response["message"]
 
-    def login(self, username: str, password: str) -> dict:
+    def login(self, username: str, password: str) -> tuple[str, str]:
         """Log in Legym account.
 
         Args:
@@ -151,25 +153,26 @@ class LegymHacker(LegymRequester):
             password: Legym password.
 
         Returns:
-            User name and school name.
+            - [0] User name.
+            - [1] School name.
         """
         self._update_api("login", {"userName": username, "password": password})
         response = self._request("login")
 
         self._headers.update(
             {
-                "authorization": f"Bearer {response.get('accessToken')}",
-                "Organization": response.get("schoolId"),
+                "authorization": f"Bearer {response['accessToken']}",
+                "Organization": response["schoolId"],
             }
         )
-        self._update_api("signIn", {"userId": response.get("id")})
+        self._update_api("signIn", {"userId": response["id"]})
         self.__get_semester()
         self.__get_activities()
         self.__limit = self.__get_limit()
 
-        return response.get("realName"), response.get("schoolName")
+        return response["realName"], response["schoolName"]
 
-    def sign_up(self, activity_name: str = "") -> dict:
+    def sign_up(self, activity_name: str = "") -> tuple[str, bool, str]:
         """Sign up for activity.
 
         Args:
@@ -178,8 +181,9 @@ class LegymHacker(LegymRequester):
             activity will be selected.
 
         Returns:
-            - [0] `True` on success, or `False` on failure.
-            - [1] Reason of success or failure.
+            - [0] Actual signed-up activity name.
+            - [1] `True` on success, or `False` on failure.
+            - [2] Reason of success or failure.
         """
         activity = (
             self.__get_first_available_activity()
@@ -188,13 +192,13 @@ class LegymHacker(LegymRequester):
         )
 
         if activity["state"] == ActivityState.signed:
-            return False, "signed in already"
+            return activity["name"], False, "已签到该活动"
         elif activity["state"] == ActivityState.registered:
-            return True, "signed up already"
+            return activity["name"], True, "已报名该活动"
         elif activity["state"] == ActivityState.blocked:
-            return False, "not available yet"
+            return activity["name"], False, "该活动未开始"
 
-        return self.__sign_up_with_id(activity["id"])
+        return activity["name"], self.__sign_up_with_id(activity["id"])
 
     def sign_in(self) -> dict[str, bool]:
         """Sign in each registered activity.
@@ -221,7 +225,7 @@ class LegymHacker(LegymRequester):
 
         return results
 
-    def running(self, distance: float = 0) -> bool:
+    def running(self, distance: float = 0) -> tuple[float, bool]:
         """Upload running data.
 
         Args:
@@ -229,7 +233,8 @@ class LegymHacker(LegymRequester):
             the upper limit of mileage will be uploaded.
 
         Returns:
-            `True` on success, or `False` on failure.
+            - [0] Actual uploaded distance.
+            - [1] `True` on success, or `False` on failure.
         """
         distance = self.__limit if distance == 0 else distance
         cost_time = random.randint(20, 30)
@@ -251,4 +256,4 @@ class LegymHacker(LegymRequester):
         )
 
         response = self._request("running")
-        return response.data
+        return distance, response["data"]
