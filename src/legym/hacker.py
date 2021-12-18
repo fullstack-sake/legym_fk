@@ -2,7 +2,7 @@ import random
 from datetime import datetime, timedelta
 
 from legym.exception import LegymException
-from legym.request import LegymRequester
+from legym.requester import LegymRequester
 
 
 class ActivityState:
