@@ -112,13 +112,30 @@ class LegymCLI(LegymHacker):
                 self.__show_specified_activities(state)
 
     def __parse_run(self, args: list) -> None:
-        pass
+        """Parse help command.
+
+        Args:
+            args: List containing distance.
+        """
+        if len(args) == 0:
+            distance, success = self.running()
+        else:
+            try:
+                demand = float(args[0])
+            except ValueError:
+                demand = 0
+            distance, success = self.running(demand)
+
+        if success:
+            print(f"成功上传跑步里程：{distance} km")
+        else:
+            print(f"上传失败！")
 
     def __parse_help(self, args: list) -> None:
         """Parse help command.
 
         Args:
-            args: list containing the command to check out.
+            args: List containing the command to check out.
         """
         filename = "help" if len(args) == 0 else args[0]
         filepath = os.path.join("doc", f"{filename}.txt")
