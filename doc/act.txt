@@ -8,23 +8,29 @@ Explanation:
 
 Argument:
 
-    category: Optional.
-              Category of activity you want to check out, including options below:
-              - signed        Activities you have already signed in.
-              - registered    Activities you have registered but not signed in yet.
-              - available     Activities currently available for you to register.
-              - blocked       Activities that are not yet opened for register.
-              If not specified, we will show you all activities.
+    state: Optional.
+            State of activity you want to check out, including options below:
+            - signed        Activities you have already signed in.
+            - registered    Activities you have registered but not signed in yet.
+            - available     Activities currently available for you to register.
+            - blocked       Activities that are not yet opened for register.
+            If not specified, we will show you all activities.
 
-Explanation:
+Example:
 
     >>> act signed
     第三空间清水河校区综训馆
     第三空间沙河校区体育场
 
     >>> act
-    活动名称                    活动状态
-    第三空间清水河校区体育场    可报名
-    第三空间清水河校区综训馆    已签到
-    第三空间沙河校区体育场      已签到
-    ...                         ...
+    已签到：
+    第三空间清水河校区综训馆
+
+    可报名：
+    第三空间沙河校区体育场
+    第三空间清水河校区体育场
+
+Note:
+
+    We are OK with abbreviation of state, e.g. "ava" for "available",
+    as long as it is a substring of full name, and does not cause ambiguity.

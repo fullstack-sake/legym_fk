@@ -86,20 +86,20 @@ class LegymCLI(LegymHacker):
         if len(args) == 0:
             self.__show_all_activities()
         else:
-            category = args[0]
+            state_name = args[0]
             state = (
                 ActivityState.SIGNED
-                if category == "signed"
+                if "signed".find(state_name) != -1
                 else ActivityState.REGISTERED
-                if category == "registered"
+                if "registered".find(state_name) != -1
                 else ActivityState.AVAILABLE
-                if category == "available"
+                if "available".find(state_name) != -1
                 else ActivityState.BLOCKED
-                if category == "blocked"
+                if "blocked".find(state_name) != -1
                 else -1
             )
             if state == -1:
-                print(f"类别不存在：{category}")
+                print(f"类别不存在：{state_name}")
             else:
                 self.__show_specified_activities(state)
 

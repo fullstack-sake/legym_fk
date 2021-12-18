@@ -6,7 +6,6 @@ Commands:
 
     Command     Arguments               Explanation
 
-    login       [username] [password]   Login account.
     reg         <activity>              Register activity.
     sign                                Sign in activity.
     act         <category>              Check out activities.
