@@ -1,0 +1,12 @@
+Usage:
+
+    quit
+
+Explantion:
+
+    Quit program.
+
+Example:
+
+    >>> quit
+    ------ Thanks for your support ------

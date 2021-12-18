@@ -1,0 +1,30 @@
+Usage:
+
+    act <category>
+
+Explanation:
+
+    Check out activities currently displayed on Legym app.
+
+Argument:
+
+    category: Optional.
+              Category of activity you want to check out, including options below:
+              - signed        Activities you have already signed in.
+              - registered    Activities you have registered but not signed in yet.
+              - available     Activities currently available for you to register.
+              - blocked       Activities that are not yet opened for register.
+              If not specified, we will show you all activities.
+
+Explanation:
+
+    >>> act signed
+    第三空间清水河校区综训馆
+    第三空间沙河校区体育场
+
+    >>> act
+    Activity                    State
+    第三空间清水河校区体育场    Available
+    第三空间清水河校区综训馆    Signed
+    第三空间沙河校区体育场      Signed
+    ...                         ...

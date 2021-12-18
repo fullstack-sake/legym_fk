@@ -1,0 +1,26 @@
+Usage:
+
+    login [username] [password]
+
+Explanation:
+
+    Login your Legym account.
+
+Argument:
+
+    username: Compulsory.
+              Your Legym username.
+
+    password: Compulsory.
+              Your Legym password.
+
+Example:
+
+    >>> login 18912341234 123456
+    UESTC-William, Welcome back!
+
+Note:
+
+    Username and password are compulsory arguments.
+    But if you accidentally forget to type them in,
+    we will also require your input again afterwards.

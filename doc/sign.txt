@@ -1,0 +1,13 @@
+Usage:
+
+    sign
+
+Explantion:
+
+    Sign in every activities you have registered.
+
+Example:
+
+    >>> sign
+    第三空间清水河校区综训馆 signed in success.
+    第三空间沙河校区体育场 signed in failed.
