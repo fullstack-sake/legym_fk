@@ -26,7 +26,7 @@ class LegymHacker(LegymRequester):
 
     def __get_semester(self) -> None:
         """Get semester ID and update relevant API."""
-        response = self._request("semester")
+        response = self.request("semester")
         semester_id = response["id"]
         self._update_api("limit", {"semesterId": semester_id})
         self._update_api("running", {"semesterId": semester_id})
@@ -37,14 +37,14 @@ class LegymHacker(LegymRequester):
         Returns:
             Upper limit of mileage.
         """
-        response = self._request("limit")
+        response = self.request("limit")
         limit_id = response["limitationsGoalsSexInfoId"]
         self._update_api("running", {"limitationsGoalsSexInfoId": limit_id})
         return response["effectiveMileageEnd"]
 
     def __get_activities(self) -> None:
         """Get activities open for signing up."""
-        response = self._request("activities")
+        response = self.request("activities")
         activities_list = response["items"]
 
         self._activities = []
@@ -129,7 +129,7 @@ class LegymHacker(LegymRequester):
             - [1] Reason of success or failure.
         """
         self._update_api("signUp", {"activityId": activity_id})
-        response = self._request("signUp")
+        response = self.request("signUp")
         return response["success"], response["reason"]
 
     def __sign_in_with_id(self, activity_id: str) -> str:
@@ -142,7 +142,7 @@ class LegymHacker(LegymRequester):
             Response message.
         """
         self._update_api("signIn", {"activityId": activity_id})
-        response = self._request("signIn")
+        response = self.request("signIn")
         return response["message"]
 
     def login(self, username: str, password: str) -> tuple[str, str]:
@@ -157,7 +157,7 @@ class LegymHacker(LegymRequester):
             - [1] School name.
         """
         self._update_api("login", {"userName": username, "password": password})
-        response = self._request("login")
+        response = self.request("login")
 
         self._headers.update(
             {
@@ -255,5 +255,5 @@ class LegymHacker(LegymRequester):
             },
         )
 
-        response = self._request("running")
+        response = self.request("running")
         return distance, response["data"]

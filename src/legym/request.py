@@ -52,7 +52,7 @@ class LegymRequester:
                 f"Headers config not found under path '{headers_path}'"
             ) from None
 
-    def _request(self, api_name: str) -> LegymResponse:
+    def request(self, api_name: str) -> LegymResponse:
         """Issue a request.
 
         Args:
