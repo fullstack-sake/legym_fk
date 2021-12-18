@@ -32,7 +32,27 @@ def parse_args():
 if __name__ == "__main__":
     username, password, distance, activity = parse_args()
     hacker = LegymHacker()
+    print("Initialized")
+
     hacker.login(username, password)
-    hacker.running(distance)
-    hacker.sign_up(activity)
-    hacker.sign_in()
+    print("Login success")
+
+    success = hacker.running(distance)
+    if success:
+        print(f"Running data uploaded: {distance}km")
+    else:
+        print("Running data upload failed.")
+
+    success, reason = hacker.sign_up(activity)
+    if success:
+        print(f"Signed up for {activity}")
+    else:
+        print(reason)
+
+    task_result = [item[1] for item in hacker.sign_in()]
+    if all(task_result):
+        print("All activities signed in")
+    elif any(task_result):
+        print("Signed in part of activities signed up")
+    else:
+        print("No activity signed in")
