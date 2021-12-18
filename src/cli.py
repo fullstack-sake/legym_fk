@@ -67,12 +67,18 @@ class LegymCLI(LegymHacker):
                 print(e)
 
     def __parse_reg(self, args: list) -> None:
-        """Parse help command.
+        """Parse register command.
 
         Args:
             args: List containing activity to register.
         """
-        pass
+        if len(args) == 0:
+            name, _, reason = self.sign_up()
+            print(f"{name}：{reason}")
+        else:
+            for activity in args:
+                name, _, reason = self.sign_up(activity)
+                print(f"{name}：{reason}")
 
     def __parse_sign(self, args: list) -> None:
         pass

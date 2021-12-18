@@ -198,7 +198,8 @@ class LegymHacker(LegymRequester):
         elif activity["state"] == ActivityState.BLOCKED:
             return activity["name"], False, "该活动未开始"
 
-        return activity["name"], self.__sign_up_with_id(activity["id"])
+        success, reason = self.__sign_up_with_id(activity["id"])
+        return activity["name"], success, reason
 
     def sign_in(self) -> dict[str, bool]:
         """Sign in each registered activity.
