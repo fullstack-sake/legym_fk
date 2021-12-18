@@ -8,7 +8,7 @@ Commands:
 
     reg         <activity>              Register activity.
     sign                                Sign in activity.
-    act         <category>              Check out activities.
+    act         <state>                 Check out activities.
     run         <distance>              Upload running data.
     help        <command>               Get help of command.
     quit                                Quit application.

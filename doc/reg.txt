@@ -1,22 +1,33 @@
 Usage:
 
-    reg <activity>
+    reg <activity 1> <activity 2> ...
 
 Explanation:
 
-    Register activity.
+    Register activities.
 
 Argument:
 
-    activity: Optional.
-              Name of ctivity you want to register, in Chinese.
-              If not specified, we will register the first
-              available activity for you.
+    activity 1,
+    activity 2,
+           ...: Optional.
+                Name of activity you want to register, in Chinese.
+                You can specify several activities at a time.
+                If not specified, we will register the first
+                available activity for you.
 
 Example:
 
     >>> reg 第三空间清水河校区综训馆
-    报名成功
+    第三空间清水河校区综训馆：报名成功
 
     >>> reg 第三空间沙河校区体育场
-    已签到该活动
+    第三空间沙河校区体育场：已签到该活动
+
+Note:
+
+    We are OK with abbreviation of activity, e.g. "综训馆" for
+    "第三空间清水河校区综训馆", as long as it is a substring of full name,
+    and does not cause ambiguity. If your abbreviation leads to
+    unexpected results, e.g. registering an activity that cannot be
+    signed in, this program and its authors assume no responsibility.
