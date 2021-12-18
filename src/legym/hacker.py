@@ -47,10 +47,10 @@ class LegymHacker(LegymRequester):
         response = self._request("activities")
         activities_list = response["items"]
 
-        self.__activities = []
+        self._activities = []
         for activity in activities_list:
             if activity["signTime"]:
-                self.__activities.append(
+                self._activities.append(
                     {
                         "id": activity["id"],
                         "name": activity["name"],
@@ -58,7 +58,7 @@ class LegymHacker(LegymRequester):
                     }
                 )
             elif activity["isRegister"]:
-                self.__activities.append(
+                self._activities.append(
                     {
                         "id": activity["id"],
                         "name": activity["name"],
@@ -66,7 +66,7 @@ class LegymHacker(LegymRequester):
                     }
                 )
             elif activity["state"] == 4:
-                self.__activities.append(
+                self._activities.append(
                     {
                         "id": activity["id"],
                         "name": activity["name"],
@@ -74,7 +74,7 @@ class LegymHacker(LegymRequester):
                     }
                 )
             else:
-                self.__activities.append(
+                self._activities.append(
                     {
                         "id": activity["id"],
                         "name": activity["name"],
@@ -82,7 +82,7 @@ class LegymHacker(LegymRequester):
                     }
                 )
 
-        self.__activities.sort(key=lambda activity: activity["state"])
+        self._activities.sort(key=lambda activity: activity["state"])
 
     def __get_first_available_activity(self) -> dict:
         """Get first available activity.
@@ -94,7 +94,7 @@ class LegymHacker(LegymRequester):
             return list(
                 filter(
                     lambda dic: dic["state"] == ActivityState.available,
-                    self.__activities,
+                    self._activities,
                 )
             )[0]
         except IndexError:
@@ -112,7 +112,7 @@ class LegymHacker(LegymRequester):
         try:
             return list(
                 filter(
-                    lambda dic: dic["name"].find(activity_name) != -1, self.__activities
+                    lambda dic: dic["name"].find(activity_name) != -1, self._activities
                 )
             )[0]
         except IndexError:
@@ -209,7 +209,7 @@ class LegymHacker(LegymRequester):
         registered_activities = list(
             filter(
                 lambda dic: dic["state"] == ActivityState.registered,
-                self.__activities,
+                self._activities,
             )
         )
 
