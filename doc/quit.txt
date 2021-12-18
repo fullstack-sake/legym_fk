@@ -9,4 +9,4 @@ Explantion:
 Example:
 
     >>> quit
-    ------ Thanks for your support ------
+    ------ 感谢支持 ------

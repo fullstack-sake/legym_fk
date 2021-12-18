@@ -17,7 +17,7 @@ Argument:
 Example:
 
     >>> login 18912341234 123456
-    UESTC-William, Welcome back!
+    电子科技大学的XXX，欢迎回来！
 
 Note:
 

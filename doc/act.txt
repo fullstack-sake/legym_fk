@@ -24,7 +24,7 @@ Explanation:
 
     >>> act
     Activity                    State
-    第三空间清水河校区体育场    Available
-    第三空间清水河校区综训馆    Signed
-    第三空间沙河校区体育场      Signed
+    第三空间清水河校区体育场    可报名
+    第三空间清水河校区综训馆    已签到
+    第三空间沙河校区体育场      已签到
     ...                         ...

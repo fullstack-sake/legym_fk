@@ -16,7 +16,7 @@ Argument:
 Example:
 
     >>> reg 第三空间清水河校区综训馆
-    Success: 报名成功
+    报名成功
 
     >>> reg 第三空间沙河校区体育场
-    Failed: signed in already
+    已签到该活动
