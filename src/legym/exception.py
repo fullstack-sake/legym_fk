@@ -12,3 +12,8 @@ class LegymException(Exception):
 
     def __str__(self) -> str:
         return self.__message
+
+    @property
+    def message(self) -> str:
+        """Set message as read-only."""
+        return self.__message
