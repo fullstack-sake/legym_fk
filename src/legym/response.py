@@ -3,40 +3,47 @@ import os
 
 import requests
 
+from legym.exception import LegymException
+
 
 class LegymResponse:
     """Response returned by Legym API."""
 
     def __init__(self, response: requests.Response, name: str) -> None:
-        self.__validate_status(response)
-        self.__body = response.json()
-        self.__primary_parse()
+        self.__response = response
         self.__name = name
+        self.__parse_to_json()
+        self.__validate_status()
+        self.__parse_content()
 
-    def __validate_status(self, response: requests.Response) -> None:
-        """Validate the status code of response.
+    def __parse_to_json(self) -> None:
+        """Parse response to JSON form."""
+        try:
+            self.__body: dict = self.__response.json()
+        except json.JSONDecodeError:
+            raise LegymException(f"无法序列化的响应：{self.__response.text}")
 
-        Args:
-            response: The response to validate.
-        """
-        if response.status_code == 200:
+    def __validate_status(self) -> None:
+        """Validate status code of response."""
+        status = self.__response.status_code
+        if status == 200:
             return
 
-        try:
-            response_json: dict = response.json()
-        except json.JSONDecodeError:
-            raise Exception(response.text)
-        else:
-            raise Exception(response_json.get("message", "network trouble"))
+        self.persistence()
+        raise LegymException(self.__body.get("message", f"网络异常，状态码：{status}"))
 
-    def __primary_parse(self) -> None:
+    def __parse_content(self) -> None:
         """Parse code, message, data of response."""
+        del self.__response
+
         try:
             self.__code: str = self.__body["code"]
             self.__message: str = self.__body["message"]
             self.__data: dict = self.__body["data"]
+
         except KeyError:
-            raise KeyError("irregular response structure")
+            self.persistence()
+            raise LegymException("网站响应格式超出预期")
 
     @property
     def code(self):
@@ -80,4 +87,4 @@ class LegymResponse:
         try:
             return self.__data[key]
         except KeyError:
-            raise KeyError(f"response <{self.__name}> has no key named '{key}'")
+            raise LegymException(f"{self.__name} API 响应中的 `data` 没有 `{key}` 字段")
