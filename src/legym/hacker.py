@@ -217,12 +217,11 @@ class LegymHacker(LegymRequester):
         results = {}
         for activity in registered_activities:
             try:
-                self.__sign_in_with_id(activity["id"])
-            except Exception:
-                results[activity["name"]] = False
-                continue
+                message = self.__sign_in_with_id(activity["id"])
+            except LegymException as e:
+                results[activity["name"]] = e
             else:
-                results[activity["name"]] = True
+                results[activity["name"]] = message
 
         return results
 

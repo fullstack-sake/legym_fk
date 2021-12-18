@@ -52,7 +52,7 @@ class LegymCLI(LegymHacker):
                 elif commands[0] == "reg":
                     self.__parse_reg(commands[1:])
                 elif commands[0] == "sign":
-                    self.__parse_sign(commands[1:])
+                    self.__parse_sign()
                 elif commands[0] == "act":
                     self.__parse_act(commands[1:])
                 elif commands[0] == "run":
@@ -80,8 +80,10 @@ class LegymCLI(LegymHacker):
                 name, _, reason = self.sign_up(activity)
                 print(f"{name}：{reason}")
 
-    def __parse_sign(self, args: list) -> None:
-        pass
+    def __parse_sign(self) -> None:
+        """Parse sign command."""
+        results = self.sign_in().items()
+        print("\n".join([f"{result[0]}：{result[1]}" for result in results]))
 
     def __parse_act(self, args: list) -> None:
         """Parse activity command.
