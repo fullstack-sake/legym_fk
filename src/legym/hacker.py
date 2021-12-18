@@ -9,13 +9,13 @@ class ActivityState:
     """Current state of activity, concerning availability and user actions."""
 
     # Already signed in.
-    signed = 0
+    SIGNED = 0
     # Already signed up, but not signed in yet.
-    registered = 1
+    REGISTERED = 1
     # Open for signing up.
-    available = 2
+    AVAILABLE = 2
     # Unavailable to user.
-    blocked = 3
+    BLOCKED = 3
 
 
 class LegymHacker(LegymRequester):
@@ -54,7 +54,7 @@ class LegymHacker(LegymRequester):
                     {
                         "id": activity["id"],
                         "name": activity["name"],
-                        "state": ActivityState.signed,
+                        "state": ActivityState.SIGNED,
                     }
                 )
             elif activity["isRegister"]:
@@ -62,7 +62,7 @@ class LegymHacker(LegymRequester):
                     {
                         "id": activity["id"],
                         "name": activity["name"],
-                        "state": ActivityState.registered,
+                        "state": ActivityState.REGISTERED,
                     }
                 )
             elif activity["state"] == 4:
@@ -70,7 +70,7 @@ class LegymHacker(LegymRequester):
                     {
                         "id": activity["id"],
                         "name": activity["name"],
-                        "state": ActivityState.available,
+                        "state": ActivityState.AVAILABLE,
                     }
                 )
             else:
@@ -78,7 +78,7 @@ class LegymHacker(LegymRequester):
                     {
                         "id": activity["id"],
                         "name": activity["name"],
-                        "state": ActivityState.blocked,
+                        "state": ActivityState.BLOCKED,
                     }
                 )
 
@@ -93,7 +93,7 @@ class LegymHacker(LegymRequester):
         try:
             return list(
                 filter(
-                    lambda dic: dic["state"] == ActivityState.available,
+                    lambda dic: dic["state"] == ActivityState.AVAILABLE,
                     self._activities,
                 )
             )[0]
@@ -191,11 +191,11 @@ class LegymHacker(LegymRequester):
             else self.__get_specified_activity(activity_name)
         )
 
-        if activity["state"] == ActivityState.signed:
+        if activity["state"] == ActivityState.SIGNED:
             return activity["name"], False, "已签到该活动"
-        elif activity["state"] == ActivityState.registered:
+        elif activity["state"] == ActivityState.REGISTERED:
             return activity["name"], True, "已报名该活动"
-        elif activity["state"] == ActivityState.blocked:
+        elif activity["state"] == ActivityState.BLOCKED:
             return activity["name"], False, "该活动未开始"
 
         return activity["name"], self.__sign_up_with_id(activity["id"])
@@ -208,7 +208,7 @@ class LegymHacker(LegymRequester):
         """
         registered_activities = list(
             filter(
-                lambda dic: dic["state"] == ActivityState.registered,
+                lambda dic: dic["state"] == ActivityState.REGISTERED,
                 self._activities,
             )
         )
