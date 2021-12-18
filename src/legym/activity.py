@@ -1,11 +1,12 @@
-from enum import Enum
+from enum import IntEnum
 
 
-class ActivityState(Enum):
-    SIGNED = "已签到"
-    REGISTERED = "已报名"
-    AVAILABLE = "可报名"
-    BLOCKED = "未开始"
+class ActivityState(IntEnum):
+    unknown = 0
+    signed = 1
+    registered = 2
+    available = 3
+    blocked = 4
 
 
 class LegymActivity:
@@ -19,14 +20,16 @@ class LegymActivity:
         """
         self.__id = activity["id"]
         self.__name = activity["name"]
-        if activity["signTime"] > 0:
-            self.__state = ActivityState.SIGNED
+        if activity["signTime"] != None:
+            self.__state = ActivityState.signed
         elif activity["isRegister"] == True:
-            self.__state = ActivityState.REGISTERED
+            self.__state = ActivityState.registered
         elif activity["state"] == 4:
-            self.__state = ActivityState.AVAILABLE
+            self.__state = ActivityState.available
+        elif activity["state"] == 0:
+            self.__state = ActivityState.blocked
         else:
-            self.__state = ActivityState.BLOCKED
+            self.__state = ActivityState.unknown
 
     @property
     def id(self) -> str:
