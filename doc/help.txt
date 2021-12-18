@@ -1,0 +1,19 @@
+Usage:
+
+    command [compulsory] <optional>
+
+Commands:
+
+    Command     Arguments               Explanation
+
+    reg         <activity>              Register activity.
+    sign                                Sign in activity.
+    act         <state>                 Check out activities.
+    run         <distance>              Upload running data.
+    help        <command>               Get help of command.
+    quit                                Quit application.
+
+Note:
+
+    Type `help <command>` to check out more details
+    about a command.
