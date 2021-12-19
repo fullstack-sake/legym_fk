@@ -147,24 +147,25 @@ class LegymHacker(LegymRequester):
         success, reason = self.__register_with_id(activity.id)
         return activity.name, success, reason
 
-    def sign(self) -> dict[str, bool]:
+    def sign(self) -> tuple[tuple[str, bool, str]]:
         """Sign in each registered activity.
 
         Returns:
-            Result of each task, structured like: `{"Task1": True}`
+            Results of each task, structured like:
+            `(("Task 1", True, "Signed in!"), ...)`
         """
         activities = self._activities.search(state=ActivityState.registered)
 
-        results = {}
+        results = []
         for activity in activities:
             try:
                 message = self.__sign_with_id(activity.id)
             except LegymException as e:
-                results[activity.name] = e.message
+                results.append((activity.name, False, e.message))
             else:
-                results[activity.name] = message
+                results.append((activity.name, True, message))
 
-        return results
+        return tuple(results)
 
     def running(self, distance: str = "") -> tuple[float, bool]:
         """Upload running data.

@@ -37,7 +37,7 @@ if __name__ == "__main__":
 
     actual_distance, success = hacker.running(distance)
     if success:
-        print(f"Running data uploaded: {actual_distance}km")
+        print(f"Running data uploaded: {actual_distance} km")
     else:
         print("Running data upload failed.")
 
@@ -47,10 +47,10 @@ if __name__ == "__main__":
     else:
         print("Register failed.")
 
-    task_results = [item[1] for item in hacker.sign().items()]
+    task_results = [result[1] for result in hacker.sign()]
     if all(task_results):
         print("All activities signed in")
     elif any(task_results):
-        print("Signed in part of activities signed up")
+        print("Signed in part of activities")
     else:
         print("No activity signed in")
