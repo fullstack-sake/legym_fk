@@ -26,11 +26,6 @@ class LegymHacker(LegymRequester):
         self.__limit: float = response["effectiveMileageEnd"]
         self._update_api("running", {"limitationsGoalsSexInfoId": limit_id})
 
-    def __request_activities(self) -> None:
-        """Get activities open for signing up."""
-        response = self.request("activities")
-        self._activities = LegymActivities(response["items"])
-
     def __get_first_available_activity(self) -> LegymActivity:
         """Get first available activity.
 
@@ -70,8 +65,8 @@ class LegymHacker(LegymRequester):
             - [0] `True` on success, or `False` on failure.
             - [1] Reason of success or failure.
         """
-        self._update_api("signUp", {"activityId": activity_id})
-        response = self.request("signUp")
+        self._update_api("register", {"activityId": activity_id})
+        response = self.request("register")
         return response["success"], response["reason"]
 
     def __sign_with_id(self, activity_id: str) -> str:
@@ -83,8 +78,8 @@ class LegymHacker(LegymRequester):
         Returns:
             Response message.
         """
-        self._update_api("signIn", {"activityId": activity_id})
-        response = self.request("signIn")
+        self._update_api("sign", {"activityId": activity_id})
+        response = self.request("sign")
         return response["message"]
 
     def login(self, username: str, password: str) -> tuple[str, str]:
@@ -107,12 +102,21 @@ class LegymHacker(LegymRequester):
                 "Organization": response["schoolId"],
             }
         )
-        self._update_api("signIn", {"userId": response["id"]})
+        self._update_api("sign", {"userId": response["id"]})
         self.__request_semester()
         self.__request_limit()
-        self.__request_activities()
+        self._activities = self.get_activities()
 
         return response["realName"], response["schoolName"]
+
+    def get_activities(self) -> LegymActivities:
+        """Get activity list.
+
+        Returns:
+            Legym Activities object.
+        """
+        response = self.request("activities")
+        return LegymActivities(response["items"])
 
     def register(self, activity_name: str = "") -> tuple[str, bool, str]:
         """Register activity.
