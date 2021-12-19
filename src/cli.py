@@ -73,16 +73,16 @@ class LegymCLI(LegymHacker):
             args: List containing activity to register.
         """
         if len(args) == 0:
-            name, _, reason = self.sign_up()
+            name, _, reason = self.register()
             print(f"{name}：{reason}")
         else:
             for activity in args:
-                name, _, reason = self.sign_up(activity)
+                name, _, reason = self.register(activity)
                 print(f"{name}：{reason}")
 
     def __parse_sign(self) -> None:
         """Parse sign command."""
-        results = self.sign_in().items()
+        results = self.sign().items()
         print("\n".join([f"{result[0]}：{result[1]}" for result in results]))
 
     def __parse_act(self, args: list) -> None:

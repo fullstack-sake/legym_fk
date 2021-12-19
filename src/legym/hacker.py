@@ -1,21 +1,9 @@
 import random
 from datetime import datetime, timedelta
 
+from legym.activities import *
 from legym.exception import LegymException
 from legym.requester import LegymRequester
-
-
-class ActivityState:
-    """Current state of activity, concerning availability and user actions."""
-
-    # Already signed in.
-    SIGNED = 0
-    # Already signed up, but not signed in yet.
-    REGISTERED = 1
-    # Open for signing up.
-    AVAILABLE = 2
-    # Unavailable to user.
-    BLOCKED = 3
 
 
 class LegymHacker(LegymRequester):
@@ -24,105 +12,59 @@ class LegymHacker(LegymRequester):
     def __init__(self) -> None:
         super().__init__()
 
-    def __get_semester(self) -> None:
+    def __request_semester(self) -> None:
         """Get semester ID and update relevant API."""
         response = self.request("semester")
-        semester_id = response["id"]
+        semester_id: str = response["id"]
         self._update_api("limit", {"semesterId": semester_id})
         self._update_api("running", {"semesterId": semester_id})
 
-    def __get_limit(self) -> float:
-        """Get mileage limit and update relevant API.
-
-        Returns:
-            Upper limit of mileage.
-        """
+    def __request_limit(self) -> None:
+        """Get mileage limit and update relevant API."""
         response = self.request("limit")
-        limit_id = response["limitationsGoalsSexInfoId"]
+        limit_id: str = response["limitationsGoalsSexInfoId"]
+        self.__limit: float = response["effectiveMileageEnd"]
         self._update_api("running", {"limitationsGoalsSexInfoId": limit_id})
-        return response["effectiveMileageEnd"]
 
-    def __get_activities(self) -> None:
+    def __request_activities(self) -> None:
         """Get activities open for signing up."""
         response = self.request("activities")
-        activities_list = response["items"]
+        self._activities = LegymActivities(response["items"])
 
-        self._activities = []
-        for activity in activities_list:
-            if activity["signTime"]:
-                self._activities.append(
-                    {
-                        "id": activity["id"],
-                        "name": activity["name"],
-                        "state": ActivityState.SIGNED,
-                    }
-                )
-            elif activity["isRegister"]:
-                self._activities.append(
-                    {
-                        "id": activity["id"],
-                        "name": activity["name"],
-                        "state": ActivityState.REGISTERED,
-                    }
-                )
-            elif activity["state"] == 4:
-                self._activities.append(
-                    {
-                        "id": activity["id"],
-                        "name": activity["name"],
-                        "state": ActivityState.AVAILABLE,
-                    }
-                )
-            else:
-                self._activities.append(
-                    {
-                        "id": activity["id"],
-                        "name": activity["name"],
-                        "state": ActivityState.BLOCKED,
-                    }
-                )
-
-        self._activities.sort(key=lambda activity: activity["state"])
-
-    def __get_first_available_activity(self) -> dict:
+    def __get_first_available_activity(self) -> LegymActivity:
         """Get first available activity.
 
         Returns:
-            Activity data.
+            Activity object.
         """
-        try:
-            return list(
-                filter(
-                    lambda dic: dic["state"] == ActivityState.AVAILABLE,
-                    self._activities,
-                )
-            )[0]
-        except IndexError:
-            raise LegymException("当前没有可报名的活动")
+        available_activities = self._activities.search(state=ActivityState.available)
 
-    def __get_specified_activity(self, activity_name: str) -> dict:
+        if len(available_activities) == 0:
+            raise LegymException("当前没有可报名的活动")
+        else:
+            return available_activities[0]
+
+    def __get_specified_activity(self, activity_name: str) -> LegymActivity:
         """Get specified activity.
 
         Args:
-            activity_name: Name of specified activity.
+            activity_name: Name of activity.
 
         Returns:
-            Activity data.
+            Activity object.
         """
-        try:
-            return list(
-                filter(
-                    lambda dic: dic["name"].find(activity_name) != -1, self._activities
-                )
-            )[0]
-        except IndexError:
-            raise LegymException(f"找不到活动：{activity_name}")
+        specified_activities = self._activities.search(name=activity_name)
 
-    def __sign_up_with_id(self, activity_id: str) -> tuple[bool, str]:
-        """Sign up activity with ID.
+        if len(specified_activities) == 0:
+            raise LegymException(f"找不到活动：{activity_name}")
+        else:
+            return specified_activities[0]
+
+    def __register_with_id(self, activity_id: str) -> tuple[bool, str]:
+        """Register activity with ID.
 
         Args:
-            activity_id: ID of activity.
+            activity_id: Activity ID.
 
         Returns:
             - [0] `True` on success, or `False` on failure.
@@ -132,11 +74,11 @@ class LegymHacker(LegymRequester):
         response = self.request("signUp")
         return response["success"], response["reason"]
 
-    def __sign_in_with_id(self, activity_id: str) -> str:
+    def __sign_with_id(self, activity_id: str) -> str:
         """Sign in activity with ID.
 
         Args:
-            activity_id: ID of activity.
+            activity_id: Activity ID.
 
         Returns:
             Response message.
@@ -166,77 +108,76 @@ class LegymHacker(LegymRequester):
             }
         )
         self._update_api("signIn", {"userId": response["id"]})
-        self.__get_semester()
-        self.__get_activities()
-        self.__limit = self.__get_limit()
+        self.__request_semester()
+        self.__request_limit()
+        self.__request_activities()
 
         return response["realName"], response["schoolName"]
 
-    def sign_up(self, activity_name: str = "") -> tuple[str, bool, str]:
-        """Sign up for activity.
+    def register(self, activity_name: str = "") -> tuple[str, bool, str]:
+        """Register activity.
 
         Args:
-            activity_name: Name of activity to sign up for,
+            activity_name: Name of activity to register,
             default to "", in which case the first available
-            activity will be selected.
+            activity will be registered.
 
         Returns:
-            - [0] Actual signed-up activity name.
+            - [0] Actual registered activity name.
             - [1] `True` on success, or `False` on failure.
             - [2] Reason of success or failure.
         """
         activity = (
             self.__get_first_available_activity()
-            if not activity_name
+            if activity_name == ""
             else self.__get_specified_activity(activity_name)
         )
 
-        if activity["state"] == ActivityState.SIGNED:
-            return activity["name"], False, "已签到该活动"
-        elif activity["state"] == ActivityState.REGISTERED:
-            return activity["name"], True, "已报名该活动"
-        elif activity["state"] == ActivityState.BLOCKED:
-            return activity["name"], False, "该活动未开始"
+        if activity.state == ActivityState.signed:
+            return activity.name, False, "已签到该活动"
+        elif activity.state == ActivityState.registered:
+            return activity.name, True, "已报名该活动"
+        elif activity.state == ActivityState.blocked:
+            return activity.name, False, "该活动未开始"
 
-        success, reason = self.__sign_up_with_id(activity["id"])
-        return activity["name"], success, reason
+        success, reason = self.__register_with_id(activity.id)
+        return activity.name, success, reason
 
-    def sign_in(self) -> dict[str, bool]:
+    def sign(self) -> dict[str, bool]:
         """Sign in each registered activity.
 
         Returns:
             Result of each task, structured like: `{"Task1": True}`
         """
-        registered_activities = list(
-            filter(
-                lambda dic: dic["state"] == ActivityState.REGISTERED,
-                self._activities,
-            )
-        )
+        activities = self._activities.search(state=ActivityState.registered)
 
         results = {}
-        for activity in registered_activities:
+        for activity in activities:
             try:
-                message = self.__sign_in_with_id(activity["id"])
+                message = self.__sign_with_id(activity.id)
             except LegymException as e:
-                results[activity["name"]] = e
+                results[activity.name] = e.message
             else:
-                results[activity["name"]] = message
+                results[activity.name] = message
 
         return results
 
-    def running(self, distance: float = 0) -> tuple[float, bool]:
+    def running(self, distance: str = "") -> tuple[float, bool]:
         """Upload running data.
 
         Args:
-            distance: Running distance, default to 0, in which case
+            distance: Running distance, default to "", in which case
             the upper limit of mileage will be uploaded.
 
         Returns:
             - [0] Actual uploaded distance.
             - [1] `True` on success, or `False` on failure.
         """
-        distance = self.__limit if distance == 0 else distance
+        try:
+            distance = float(distance)
+        except ValueError:
+            distance = self.__limit
+
         cost_time = random.randint(20, 30)
         end_time = datetime.now()
         start_time = end_time - timedelta(minutes=cost_time)

@@ -17,9 +17,7 @@ def parse_args():
     try:
         distance = float(sys.argv[3])
     except IndexError:
-        distance = 0
-    except ValueError:
-        raise ValueError("invalid distance")
+        distance = ""
 
     try:
         activity = sys.argv[4]
@@ -37,22 +35,22 @@ if __name__ == "__main__":
     hacker.login(username, password)
     print("Login success")
 
-    success = hacker.running(distance)
+    actual_distance, success = hacker.running(distance)
     if success:
-        print(f"Running data uploaded: {distance}km")
+        print(f"Running data uploaded: {actual_distance}km")
     else:
         print("Running data upload failed.")
 
-    success, reason = hacker.sign_up(activity)
+    _, success, _ = hacker.register(activity)
     if success:
-        print("Sign up success")
+        print("Register success.")
     else:
-        print(reason)
+        print("Register failed.")
 
-    task_result = [item[1] for item in hacker.sign_in()]
-    if all(task_result):
+    task_results = [item[1] for item in hacker.sign().items()]
+    if all(task_results):
         print("All activities signed in")
-    elif any(task_result):
+    elif any(task_results):
         print("Signed in part of activities signed up")
     else:
         print("No activity signed in")
