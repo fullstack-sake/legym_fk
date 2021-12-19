@@ -9,8 +9,15 @@ from .requester import LegymRequester
 class Legym(LegymRequester):
     """Legym hacker application."""
 
-    def __init__(self) -> None:
+    def __init__(self, username: str, password: str) -> None:
+        """Initialize requester and log in account.
+
+        Args:
+            username: Legym username.
+            password: Legym password.
+        """
         super().__init__()
+        self.login(username, password)
 
     def __request_semester(self) -> None:
         """Get semester ID and update relevant API."""

@@ -29,10 +29,7 @@ def parse_args():
 
 if __name__ == "__main__":
     username, password, distance, activity = parse_args()
-    hacker = Legym()
-    print("Initialized")
-
-    hacker.login(username, password)
+    hacker = Legym(username, password)
     print("Login success")
 
     actual_distance, success = hacker.running(distance)
