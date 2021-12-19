@@ -1,9 +1,9 @@
 import random
 from datetime import datetime, timedelta
 
-from legym.activities import *
-from legym.exception import LegymException
-from legym.requester import LegymRequester
+from .activities import *
+from .exception import LegymException
+from .requester import LegymRequester
 
 
 class Legym(LegymRequester):

@@ -3,7 +3,7 @@ import os
 
 import requests
 
-from legym.exception import LegymException
+from .exception import LegymException
 
 
 class LegymResponse:

@@ -3,7 +3,7 @@ import os
 
 import requests
 
-from legym.response import LegymResponse
+from .response import LegymResponse
 
 
 class LegymRequester:

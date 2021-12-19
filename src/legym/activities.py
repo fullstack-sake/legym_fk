@@ -1,4 +1,4 @@
-from legym.activity import *
+from .activity import *
 
 
 class LegymActivities:
