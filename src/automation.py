@@ -1,6 +1,6 @@
 import sys
 
-from legym import LegymHacker
+from legym import Legym
 
 
 def parse_args():
@@ -29,7 +29,7 @@ def parse_args():
 
 if __name__ == "__main__":
     username, password, distance, activity = parse_args()
-    hacker = LegymHacker()
+    hacker = Legym()
     print("Initialized")
 
     hacker.login(username, password)

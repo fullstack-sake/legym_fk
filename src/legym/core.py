@@ -6,7 +6,7 @@ from legym.exception import LegymException
 from legym.requester import LegymRequester
 
 
-class LegymHacker(LegymRequester):
+class Legym(LegymRequester):
     """Legym hacker application."""
 
     def __init__(self) -> None:

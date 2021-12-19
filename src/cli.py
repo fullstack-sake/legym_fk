@@ -3,7 +3,7 @@ import os
 from legym import *
 
 
-class LegymCLI(LegymHacker):
+class LegymCLI(Legym):
     def __init__(self) -> None:
         super().__init__()
         print("------ 欢迎使用乐健命令行 ------")
