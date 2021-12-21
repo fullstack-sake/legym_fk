@@ -1,3 +1,5 @@
+#  教程待更新，可以先看doc文件夹
+#  指路乐健体育 app 破解模块：https://github.com/MrCaiDev/legym
 # 乐健体育模拟跑步与活动签到
 ## 项目介绍
 
