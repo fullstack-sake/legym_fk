@@ -8,7 +8,7 @@
 
 乐健体育 app 的**每日自动活动签到与跑步数据上传**。
 
-- 实现原理见：[模拟跑步与活动签到原理](https://github.com/MrCaiDev/legym-automation/blob/main/doc/theory.md)
+- 实现原理见：[模拟跑步与活动签到原理](https://github.com/fullstack-sake/legym_fk/blob/main/doc/theory.md)
 - 对代码改进有任何好的建议，欢迎提 Issues，或者直接 PR，感谢:handshake::heart:！
 - 如果对您有帮助，请顺手点个 Star 吧！
 
